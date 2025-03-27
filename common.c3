@@ -8,12 +8,14 @@ enum OpCode : inline uint (String description) {
   RETURN = "OP_RETURN",
 }
 
+alias Code = List{ uint };
+alias Values = List{ double };
+alias Lines = List{ int };
+
 struct Chunk {
-  int count;
-  int capacity;
-  uint *code;
-  int *lines;
-  ValueArray constants;
+  Code code;
+  Values constants;
+  Lines lines;
 }
 
 fn Chunk new_chunk() {
@@ -24,35 +26,27 @@ fn Chunk new_chunk() {
 }
 
 fn void Chunk.init(&self) {
-  self.count = 0;
-  self.capacity = 0;
-  self.code = null;
-  self.lines = null;
-  self.constants.init();
+  self.code.tinit();
+  self.constants.tinit();
+  self.lines.tinit();
 }
 
 fn void Chunk.write(&self, uint byte, int line) {
-  if (self.capacity < self.count + 1) {
-    int old_capacity = self.capacity;
-    self.capacity = @grow_capacity(old_capacity);
-    self.code = reallocate(self.code, uint.sizeof * self.capacity);
-    self.lines = reallocate(self.lines, int.sizeof * self.capacity);
-  }
-  self.code[self.count] = byte;
-  self.lines[self.count] = line;
-  self.count++;
+  self.code.push(byte);
+  self.lines.push(line);
 }
 
 fn void Chunk.free(&self) {
+  self.code.free();
+  self.lines.free();
   self.constants.free();
-  free(self.code);
-  free(self.lines);
+
   self.init();
 }
 
-fn int Chunk.add_constant(&self, Value value) {
-  self.constants.write(value);
-  return self.constants.count - 1;
+fn usz Chunk.add_constant(&self, Value value) {
+  self.constants.push(value);
+  return self.constants.len() - 1;
 }
 
 macro @grow_capacity(#capacity) {

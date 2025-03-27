@@ -2,7 +2,7 @@ module value;
 
 import common;
 
-def Value = double;
+alias Value = double;
 
 struct ValueArray {
   int capacity;

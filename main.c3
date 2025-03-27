@@ -11,7 +11,7 @@ fn int main() {
   defer chunk.free();
 
   uint x = (uint)OpCode.RETURN;
-  int constant = chunk.add_constant(200.0);
+  int constant = (int)chunk.add_constant(200.0);
 
   chunk.write(x, 1);
   chunk.write(OpCode.CONSTANT, 333);

@@ -7,17 +7,17 @@ import std::io;
 fn void Chunk.disassemble(&self, String name) {
   io::printfn("== %s ==", name);
 
-  for (int offset = 0; offset < self.count;) {
+  for (int offset = 0; offset < self.code.len();) {
     offset = self.disassemble_instruction(offset);
   }
 }
 
 fn int Chunk.disassemble_instruction(&self, int offset) {
   if (offset > 0 &&
-    self.lines[offset] == self.lines[offset - 1]) {
+    self.lines.get(offset) == self.lines.get((usz)offset - 1)) {
     io::printf("    | ");
   } else {
-    io::printf("%4d ", self.lines[offset]);
+    io::printf("%4d ", self.lines.get(offset));
   }
 
   uint instruction = self.code[offset];
@@ -38,7 +38,7 @@ fn int simple_instruction(String name, int offset) {
 }
 
 fn int constant_instruction(String name, Chunk* chunk, int offset) {
-  uint constant = chunk.code[offset + 1];
-  io::printfn("%-16s, %4d '%s'", name, constant, chunk.constants.values[constant]);
+  uint constant = chunk.code.get(offset);
+  io::printfn("%-16s, %4d '%s'", name, constant, chunk.constants.get(constant));
   return offset + 2;
 }
