@@ -28,13 +28,12 @@ fn int main() {
   io::printfn("capacity: %s, count: %s", chunk.capacity, chunk.count);
   chunk.write(x);
   io::printfn("capacity: %s, count: %s", chunk.capacity, chunk.count);
-  chunk.write(x);
+  chunk.write(OpCode.OP_CONSTANT);
   io::printfn("capacity: %s, count: %s", chunk.capacity, chunk.count);
 
   io::printfn("code: %s", chunk.code[0]);
   chunk.disassemble("my program");
   chunk.free();
-  chunk.disassemble("my program");
 
   return 0;
 }

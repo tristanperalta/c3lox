@@ -2,8 +2,9 @@ module common;
 
 import std::collections::list;
 
-enum OpCode : uint {
-  OP_RETURN
+enum OpCode : uint (String description) {
+  OP_RETURN = "OP_RETURN",
+  OP_CONSTANT = "OP_CONSTANT"
 }
 
 def Value = double;
