@@ -13,7 +13,12 @@ fn void Chunk.disassemble(&self, String name) {
 }
 
 fn int Chunk.disassemble_instruction(&self, int offset) {
-  io::printf("%s ", offset);
+  if (offset > 0 &&
+    self.lines[offset] == self.lines[offset - 1]) {
+    io::printf("    | ");
+  } else {
+    io::printf("%4d ", self.lines[offset]);
+  }
 
   uint instruction = self.code[offset];
   switch (instruction) {

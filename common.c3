@@ -11,7 +11,8 @@ enum OpCode : inline uint (String description) {
 struct Chunk {
   int count;
   int capacity;
-  uint* code;
+  uint *code;
+  int *lines;
   ValueArray constants;
 }
 
@@ -26,22 +27,26 @@ fn void Chunk.init(&self) {
   self.count = 0;
   self.capacity = 0;
   self.code = null;
+  self.lines = null;
   self.constants.init();
 }
 
-fn void Chunk.write(&self, uint byte) {
+fn void Chunk.write(&self, uint byte, int line) {
   if (self.capacity < self.count + 1) {
     int old_capacity = self.capacity;
     self.capacity = @grow_capacity(old_capacity);
     self.code = reallocate(self.code, uint.sizeof * self.capacity);
+    self.lines = reallocate(self.lines, int.sizeof * self.capacity);
   }
   self.code[self.count] = byte;
+  self.lines[self.count] = line;
   self.count++;
 }
 
 fn void Chunk.free(&self) {
   self.constants.free();
   free(self.code);
+  free(self.lines);
   self.init();
 }
 

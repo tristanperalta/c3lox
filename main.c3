@@ -7,19 +7,19 @@ import debug;
 
 fn int main() {
   Chunk chunk = common::new_chunk();
-  uint x = (uint)OpCode.OP_RETURN;
+  defer chunk.free();
 
+  uint x = (uint)OpCode.OP_RETURN;
   int constant = chunk.add_constant(1.0);
 
   io::printfn("capacity: %s, count: %s", chunk.capacity, chunk.count);
-  chunk.write(x);
+  chunk.write(x, 1);
   io::printfn("capacity: %s, count: %s", chunk.capacity, chunk.count);
-  chunk.write(OpCode.OP_CONSTANT);
+  chunk.write(OpCode.OP_CONSTANT, 333);
   io::printfn("capacity: %s, count: %s", chunk.capacity, chunk.count);
-  chunk.write((uint)constant);
+  chunk.write((uint)constant, 3);
 
   chunk.disassemble("my program");
-  chunk.free();
 
   return 0;
 }
