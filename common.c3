@@ -4,8 +4,8 @@ import std::collections::list;
 import value;
 
 enum OpCode : inline uint (String description) {
-  OP_CONSTANT = "OP_CONSTANT",
-  OP_RETURN = "OP_RETURN",
+  CONSTANT = "OP_CONSTANT",
+  RETURN = "OP_RETURN",
 }
 
 struct Chunk {

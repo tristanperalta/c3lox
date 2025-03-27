@@ -22,9 +22,9 @@ fn int Chunk.disassemble_instruction(&self, int offset) {
 
   uint instruction = self.code[offset];
   switch (instruction) {
-    case OpCode.OP_RETURN:
+    case OpCode.RETURN:
       return simple_instruction("OP_RETURN", offset);
-    case OpCode.OP_CONSTANT:
+    case OpCode.CONSTANT:
       return constant_instruction("OP_CONSTANT", self, offset);
     default:
       io::printf("Unknown opcode %d\n", instruction);
