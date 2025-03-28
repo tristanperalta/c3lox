@@ -5,11 +5,17 @@ import value;
 
 enum OpCode : inline uint (String description) {
   CONSTANT = "OP_CONSTANT",
+  ADD = "ADD",
+  SUBTRACT = "SUBTRACT",
+  MULTIPLY = "MULTIPLY",
+  DIVIDE = "DIVIDE",
+  NEGATE = "NEGATE",
   RETURN = "OP_RETURN",
 }
 
+alias Value = double;
 alias Code = List{ uint };
-alias Values = List{ double };
+alias Values = List{ Value };
 alias Lines = List{ int };
 
 struct Chunk {

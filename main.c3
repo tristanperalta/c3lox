@@ -10,12 +10,19 @@ fn int main() {
   Chunk chunk = common::new_chunk();
   defer chunk.free();
 
-  uint x = (uint)OpCode.RETURN;
-  int constant = (int)chunk.add_constant(200.0);
 
-  chunk.write(x, 1);
+
+  int constant = (int)chunk.add_constant(200.0);
   chunk.write(OpCode.CONSTANT, 333);
   chunk.write((uint)constant, 3);
+
+  int constant2 = (int)chunk.add_constant(3.3);
+  chunk.write(OpCode.CONSTANT, 333);
+  chunk.write((uint)constant2, 3);
+
+  chunk.write(OpCode.ADD, 4);
+
+  chunk.write((uint)OpCode.RETURN, 1);
 
   chunk.disassemble("my program");
 
