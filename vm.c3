@@ -5,7 +5,7 @@ import std::io;
 
 struct Vm {
   Chunk *chunk;
-  uint *ip;
+  uint ip;
 }
 
 enum InterpretResult {
@@ -24,13 +24,17 @@ fn void Vm.free(&self) {
 
 fn InterpretResult Vm.interpret(&self, Chunk *chunk) {
   self.chunk = chunk;
-  self.ip = self.chunk.code;
+  self.ip = 0;
   return self.run();
 }
 
 fn InterpretResult Vm.run(&self) {
-  foreach (&instruction : self.chunk.code) {
-    io::printfn("%s", instruction);
+  for (;;) {
+    uint instruction;
+    switch ( instruction = self.chunk.code[self.ip] ) {
+      case OpCode.RETURN:
+        return InterpretResult.OK;
+    }
+    self.ip++;
   }
-  return InterpretResult.OK;
 }
