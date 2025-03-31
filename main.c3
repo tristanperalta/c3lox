@@ -5,31 +5,43 @@ import common;
 import value;
 import debug;
 import vm;
+import scanner;
 
-fn int main() {
-  Chunk chunk = common::new_chunk();
-  defer chunk.free();
+fn int main(String[] args) {
+  io::printfn("%s", args);
 
-
-
-  int constant = (int)chunk.add_constant(200.0);
-  chunk.write(OpCode.CONSTANT, 333);
-  chunk.write((uint)constant, 3);
-
-  int constant2 = (int)chunk.add_constant(3.3);
-  chunk.write(OpCode.CONSTANT, 333);
-  chunk.write((uint)constant2, 3);
-
-  chunk.write(OpCode.ADD, 4);
-
-  chunk.write((uint)OpCode.RETURN, 1);
-
-  chunk.disassemble("my program");
-
-  Vm vm;
-
-  vm.init();
-  vm.interpret(&chunk);
+  if (args.len == 1) {
+    repl();
+  } else if (args.len == 2) {
+    runFile(args[1]);
+  } else {
+    io::printfn("usage");
+    return 1;
+  }
 
   return 0;
+}
+
+fn void repl() {
+  io::printf("prompt> ");
+  String? line = io::treadline();
+  if (catch excuse = line) {
+    io::printfn("failed");
+  }
+  interpret(line!!);
+}
+
+fn void runFile(String filename) {
+  io::printfn("running file");
+}
+
+fn InterpretResult interpret(String source) {
+  compile(source);
+  return InterpretResult.OK;
+}
+
+fn void compile(String source) {
+  scanner::Scanner s = scanner::new(source);
+  Token token = s.scan_token();
+  io::printfn(":%s", token);
 }
